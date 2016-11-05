@@ -87,7 +87,7 @@ public:
 	inline bool Locked() const {return locked;}
 
 	inline void SetScaled(bool newScaledVal) {scaled = newScaledVal;}
-	inline void ToggleScaling() { scaled = !scaled;}
+	inline void ToggleScaling() {scaled = !scaled;}
 	inline bool Scaled() const {return scaled;}
 
 	/* use libobs allocator for alignment because the matrices itemToScreen

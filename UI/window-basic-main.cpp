@@ -2585,8 +2585,8 @@ void OBSBasic::ResizePreview(uint32_t cx, uint32_t cy)
 			targetSize.height() - PREVIEW_EDGE_SIZE * 2,
 			previewX, previewY, previewScale);
 	} else { 
-		previewX = (targetSize.width()  - PREVIEW_EDGE_SIZE * 2)/2 - (cx / 2);
-		previewY = (targetSize.height() - PREVIEW_EDGE_SIZE * 2)/2 - (cy / 2);
+		previewX = (targetSize.width()  - PREVIEW_EDGE_SIZE * 2) / 2 - (cx / 2);
+		previewY = (targetSize.height() - PREVIEW_EDGE_SIZE * 2) / 2 - (cy / 2);
 		previewScale = 1.0f;
 	}
 
