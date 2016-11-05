@@ -876,6 +876,7 @@
     <addaction name="transformMenu"/>
     <addaction name="orderMenu"/>
     <addaction name="actionLockPreview"/>
+    <addaction name="actionToggleScaling"/>
     <addaction name="separator"/>
     <addaction name="actionAdvAudioProperties"/>
    </widget>
@@ -1326,6 +1327,14 @@
    </property>
    <property name="text">
     <string>Basic.MainMenu.Edit.LockPreview</string>
+   </property>
+  </action>
+  <action name="actionToggleScaling">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Basic.MainMenu.Edit.ToggleScaling</string>
    </property>
   </action>
  </widget>
