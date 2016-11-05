@@ -375,6 +375,7 @@ void OBSBasic::Save(const char *file)
 			scene, curProgramScene);
 
 	obs_data_set_bool(saveData, "preview_locked", ui->preview->Locked());
+	obs_data_set_bool(saveData, "disable_preview_scaling", !ui->preview->Scaled());
 
 	if (api) {
 		obs_data_t *moduleObj = obs_data_create();
@@ -664,6 +665,10 @@ retryScene:
 	bool previewLocked = obs_data_get_bool(data, "preview_locked");
 	ui->preview->SetLocked(previewLocked);
 	ui->actionLockPreview->setChecked(previewLocked);
+
+	bool previewScaled = !obs_data_get_bool(data, "disable_preview_scaling");
+	ui->preview->SetScaled(previewScaled);
+	ui->actionToggleScaling->setChecked(previewScaled);
 
 	if (api) {
 		obs_data_t *modulesObj = obs_data_get_obj(data, "modules");
@@ -2573,10 +2578,17 @@ void OBSBasic::ResizePreview(uint32_t cx, uint32_t cy)
 
 	/* resize preview panel to fix to the top section of the window */
 	targetSize = GetPixelSize(ui->preview);
-	GetScaleAndCenterPos(int(cx), int(cy),
-			targetSize.width()  - PREVIEW_EDGE_SIZE * 2,
+
+	if (ui->preview->Scaled()) {
+		GetScaleAndCenterPos(int(cx), int(cy),
+			targetSize.width() - PREVIEW_EDGE_SIZE * 2,
 			targetSize.height() - PREVIEW_EDGE_SIZE * 2,
 			previewX, previewY, previewScale);
+	} else { 
+		previewX = (targetSize.width()  - PREVIEW_EDGE_SIZE * 2)/2 - (cx / 2);
+		previewY = (targetSize.height() - PREVIEW_EDGE_SIZE * 2)/2 - (cy / 2);
+		previewScale = 1.0f;
+	}
 
 	previewX += float(PREVIEW_EDGE_SIZE);
 	previewY += float(PREVIEW_EDGE_SIZE);
@@ -3088,6 +3100,12 @@ void OBSBasic::CreateSourcePopupMenu(QListWidgetItem *item, bool preview)
 				this, SLOT(on_actionLockPreview_triggered()));
 		action->setCheckable(true);
 		action->setChecked(ui->preview->Locked());
+
+		action = popup.addAction(
+			QTStr("Basic.MainMenu.Edit.ToggleScaling"),
+			this, SLOT(on_actionToggleScaling_triggered()));
+		action->setCheckable(true);
+		action->setChecked(ui->preview->Scaled());
 
 		previewProjector = new QMenu(QTStr("PreviewProjector"));
 		AddProjectorMenuMonitors(previewProjector, this,
@@ -4563,6 +4581,13 @@ void OBSBasic::on_actionLockPreview_triggered()
 {
 	ui->preview->ToggleLocked();
 	ui->actionLockPreview->setChecked(ui->preview->Locked());
+}
+
+void OBSBasic::on_actionToggleScaling_triggered()
+{
+	ui->preview->ToggleScaling();
+	ui->actionToggleScaling->setChecked(!ui->preview->Scaled());
+	emit ui->preview->DisplayResized();
 }
 
 void OBSBasic::SetShowing(bool showing)

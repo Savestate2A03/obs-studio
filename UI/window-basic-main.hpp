@@ -513,6 +513,7 @@ private slots:
 	void on_actionMoveToBottom_triggered();
 
 	void on_actionLockPreview_triggered();
+	void on_actionToggleScaling_triggered();
 
 	void on_streamButton_clicked();
 	void on_recordButton_clicked();
